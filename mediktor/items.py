@@ -7,6 +7,10 @@ import scrapy
 
 
 class MediktorItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    nome = scrapy.Field()
+    descricao = scrapy.Field()
+    epidem = scrapy.Field()
+    sintomas = scrapy.Field()
+    fatores_rel = scrapy.Field()
+    especialidades = scrapy.Field()
+    url = scrapy.Field()
