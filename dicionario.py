@@ -34,7 +34,7 @@ doenca_info = {}
 
 # func para remover ç e acentos
 
-def normalizeString(string: str) -> str:
+def normalizeString(string: str):
     normalized = unicodedata.normalize('NFD', string)
     return normalized.encode('ascii', 'ignore').decode('utf-8')
 

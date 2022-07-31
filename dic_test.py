@@ -15,7 +15,7 @@ driver.get(url)
 time.sleep(10)
 
 
-def normalizeString(string: str) -> str:
+def normalizeString(string: str):
     normalized = unicodedata.normalize('NFD', string)
     return normalized.encode('ascii', 'ignore').decode('utf-8')
 
@@ -53,9 +53,11 @@ doencas['Sintomas'] = normalizeString(str(sintomas))
 doencas['Fatores Relacionados'] = normalizeString(str(fat_relac))
 doencas['Especialidades associadas'] = normalizeString(str(espec))
 
+# criando o arquivo json
 json_object = json.dumps(doencas, indent=5)
 with open("doencas.json", "w") as outfile:
     outfile.write(json_object)
+
 df = pd.DataFrame(doencas, index=[' '])
 df.to_csv('doencas.csv', sep='\t', encoding='utf-8')
 driver.quit()
