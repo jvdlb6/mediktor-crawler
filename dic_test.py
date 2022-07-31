@@ -18,7 +18,7 @@ time.sleep(10)
 
 def normalizeString(string: str) -> str:
     normalized = unicodedata.normalize('NFD', string)
-    return normalized.encode('ascii', 'ignore').decode('utf-8')
+    normalized.encode('ascii', 'ignore').decode('utf-8')
 
 
 doencas = []
