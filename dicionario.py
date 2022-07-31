@@ -1,5 +1,6 @@
 import time
 import unicodedata
+import pandas as pd
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
@@ -48,7 +49,7 @@ for link in urls:
 
     driver.get(link)
     print(link)
-    waitReturn = WebDriverWait(driver, 10).until(
+    waitReturn = WebDriverWait(driver, 100).until(
         EC.presence_of_element_located((By.XPATH,
                                         "//div[@class='mdk-conclusion-detail__main-title']"
                                         )))
@@ -60,14 +61,14 @@ for link in urls:
                                             "//div[@class='mdk-ui-card__content']"
                                             ).text.splitlines()
     except NoSuchElementException:
-        epidem.append(normalizeString(str('Não possui Epidemiologia.')))
+        epidem.append('Nao possui Epidemiologia.')
         pass
     try:
         sintomas_source = driver.find_element(By.XPATH,
-                                              "//div[@class='mdk-ui-card mdk-ui-card--overflow']"
+                                              "//body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[2]/div[2]"
                                               ).text.splitlines()
     except NoSuchElementException:
-        sintomas.append(normalizeString(str('Não possui Sintomas.')))
+        sintomas.append('Nao possui Sintomas.')
         pass
 
     try:
@@ -75,7 +76,7 @@ for link in urls:
                                          "(//div[@data-qa-ta='cardContentEl'])[3]"
                                          ).text.splitlines()
     except NoSuchElementException:
-        fat.append(normalizeString(str('Não possui Fatores Relacionados.')))
+        fat.append('Nao possui Fatores Relacionados.')
         pass
 
     try:
@@ -83,7 +84,7 @@ for link in urls:
                                            "(//div[@class='mdk-ui-card__content'])[4]"
                                            ).text.splitlines()
     except NoSuchElementException:
-        espec.append(normalizeString(str('Não possui Especialidades.')))
+        espec.append('Nao possui Especialidades.')
         pass
 
     try:
@@ -91,7 +92,7 @@ for link in urls:
                                           "//div[@class='mdk-conclusion-detail__main-description']"
                                           ).text.splitlines()
     except NoSuchElementException:
-        desc.append(normalizeString(str('Não possui Descrição.')))
+        desc.append(normalizeString(str('Nao possui Descricao.')))
         pass
 
     # povoando os arrays com a função para remover ascii
@@ -118,5 +119,6 @@ for link in urls:
 json_object = json.dumps(doenca_info, indent=5)
 with open("doencas.json", "w") as outfile:
     outfile.write(json_object)
-
+df = pd.DataFrame(doenca_info, index=[' '])
+df.to_csv('doencas.csv', sep='\t', encoding='utf-8')
 driver.quit()
