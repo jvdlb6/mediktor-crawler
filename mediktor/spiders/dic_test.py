@@ -1,7 +1,6 @@
-import scrapy
+from re import T
+import unicodedata
 import time
-import requests
-import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -9,34 +8,56 @@ from selenium.webdriver.chrome.options import Options
 import json
 
 
-class DicionarioSpider(scrapy.Spider):
-    name = 'dicionario'
-    allowed_domains = ['www.mediktor.com']
-    start_urls = ['http://www.mediktor.com/']
+url = "https://www.mediktor.com/pt-br/doenca/assaduras-fralda-pediatria?conclusionId=2ba50c2f-73e9-415b-99be-55da9ffd21c7"
+option = Options()
+option.headless = True
+driver = webdriver.Chrome(options=option)
+driver.get(url)
+time.sleep(10)
 
-    def parse(self, response):
-        url = "https://www.mediktor.com/pt-br/doenca/abcesso-fistula-anal?conclusionId=128"
-        option = Options()
-        option.headless = True
-        driver = webdriver.Chrome(options=option)
-        driver.get(url)
-        time.sleep(10)
 
-        # nome_doenca = []
+def normalizeString(string: str) -> str:
+    normalized = unicodedata.normalize('NFD', string)
+    normalized.encode('ascii', 'ignore').decode('utf-8')
 
-        nome_source = driver.find_element(By.XPATH,
-                                          "//div[@class='mdk-conclusion-detail__main-title']"
-                                          ).text
-        SELETOR = driver.find_elements(
-            By.XPATH, "//div[@class='mdk-conclusion-detail__main-description']")
-        desc = []
-        for p_tag in SELETOR:
-            desc = {}
-            desc['desc'] = (p_tag.find_element(By.XPATH,
-                                               "//p").text)
-        # nomes = nome_source.get_attribute('text')
-        # nome_doenca.append(nomes)
 
-        print(f'-------------{nome_source}---------')
-        print(f'-------------{desc}---------')
-        driver.quit()
+doencas = []
+doencas = {}
+
+nome = driver.find_element(By.XPATH,
+                           "//div[@class='mdk-conclusion-detail__main-title']"
+                           ).text
+desc = driver.find_element(By.XPATH,
+                           "//div[@class='mdk-conclusion-detail__main-description']"
+                           ).text.splitlines()
+
+epidem = driver.find_element(By.XPATH,
+                             "//div[@class='mdk-ui-card__content']"
+                             ).text.splitlines()
+
+sintomas = driver.find_element(By.XPATH,
+                               "//div[@class='mdk-ui-card mdk-ui-card--overflow']"
+                               ).text.splitlines()
+
+fat_relac = driver.find_element(By.XPATH,
+                                "(//div[@data-qa-ta='cardContentEl'])[3]"
+                                ).text.splitlines()
+
+espec = driver.find_element(By.XPATH,
+                            "(//div[@class='mdk-ui-card__content'])[4]"
+                            ).text
+
+
+doencas['url'] = url
+doencas['Nome'] = nome
+doencas['Descricao'] = normalizeString(str(desc))
+doencas['Epidemiologia'] = normalizeString(str(epidem))
+doencas['Sintomas'] = normalizeString(str(sintomas))
+doencas['Fatores Relacionados'] = normalizeString(str(fat_relac))
+doencas['Especialidades associadas'] = normalizeString(str(espec))
+
+json_object = json.dumps(doencas, indent=5)
+with open("doencas.json", "w") as outfile:
+    outfile.write(json_object)
+
+driver.quit()
