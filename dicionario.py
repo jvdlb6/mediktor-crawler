@@ -49,7 +49,7 @@ for link in urls:
 
     driver.get(link)
     print(link)
-    waitReturn = WebDriverWait(driver, 100).until(
+    waitReturn = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.XPATH,
                                         "//div[@class='mdk-conclusion-detail__main-title']"
                                         )))
