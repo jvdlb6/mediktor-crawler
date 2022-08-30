@@ -29,7 +29,6 @@ sintomas = []
 fat = []
 espec = []
 doenca_info = []
-doenca_info = {}
 
 
 # func para remover ç e acentos
@@ -97,21 +96,24 @@ for link in urls:
 
     # povoando os arrays com a função para remover ascii
 
-    desc.append(normalizeString(str(desc_source)))
-    epidem.append(normalizeString(str(epidem_source)))
-    sintomas.append(normalizeString(str(sintomas_source)))
-    nome_doenca.append(normalizeString(str(nome_source)))
-    fat.append(normalizeString(str(fat_source)))
-    espec.append(normalizeString(str(espec_source)))
+    doenca_info.append(f"Nome: {normalizeString(str(nome_source))}, Epidemiologia: {normalizeString(str(epidem_source))}\
+                       ,{normalizeString(str('Descrição: '))}, {normalizeString(str(desc_source))},Sintomas: {normalizeString(str(sintomas_source))},\
+                       {normalizeString(str(fat_source))}, {normalizeString(str('Especialização: '))}, {normalizeString(str(espec_source))}")
+    # desc.append(normalizeString(str(desc_source)))
+    # epidem.append(normalizeString(str(epidem_source)))
+    # sintomas.append(normalizeString(str(sintomas_source)))
+    # nome_doenca.append(normalizeString(str(nome_source)))
+    # fat.append(normalizeString(str(fat_source)))
+    # espec.append(normalizeString(str(espec_source)))
     # povoando o dicionario
 
-    doenca_info['url'] = url
-    doenca_info['Nome'] = nome_doenca
-    doenca_info['Descricao'] = desc
-    doenca_info['Epidemiologia'] = epidem
-    doenca_info['Sintomas'] = sintomas
-    doenca_info['Fatores relacionados'] = fat
-    doenca_info['Especialidades'] = espec
+    # doenca_info['url'] = url
+    # doenca_info['Nome'] = nome_doenca
+    # doenca_info['Descricao'] = desc
+    # doenca_info['Epidemiologia'] = epidem
+    # doenca_info['Sintomas'] = sintomas
+    # doenca_info['Fatores relacionados'] = fat
+    # doenca_info['Especialidades'] = espec
 
     driver.back()
 # criando arquivo json

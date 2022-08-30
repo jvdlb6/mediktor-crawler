@@ -21,7 +21,6 @@ def normalizeString(string: str):
 
 
 doencas = []
-doencas = {}
 
 nome = driver.find_element(By.XPATH,
                            "//div[@class='mdk-conclusion-detail__main-title']"
@@ -45,13 +44,9 @@ fat_relac = driver.find_element(By.XPATH,
 espec = driver.find_element(By.XPATH,
                             "(//div[@class='mdk-ui-card__content'])[4]"
                             ).text.splitlines()
-doencas['url'] = url
-doencas['Nome'] = normalizeString(str(nome))
-doencas['Descricao'] = normalizeString(str(desc))
-doencas['Epidemiologia'] = normalizeString(str(epidem))
-doencas['Sintomas'] = normalizeString(str(sintomas))
-doencas['Fatores Relacionados'] = normalizeString(str(fat_relac))
-doencas['Especialidades associadas'] = normalizeString(str(espec))
+doencas.append(f"Nome: {normalizeString(str(nome))}, {normalizeString(str('Descrição:'))} {normalizeString(str(desc))}\
+                       ,Epidemiologia: {normalizeString(str(epidem))},Sintomas: {normalizeString(str(sintomas))},\
+                       Fatores Relacionados: {normalizeString(str(fat_relac))}, {normalizeString(str('Especialização:'))}, {normalizeString(str(espec))}")
 
 # criando o arquivo json
 json_object = json.dumps(doencas, indent=5)
